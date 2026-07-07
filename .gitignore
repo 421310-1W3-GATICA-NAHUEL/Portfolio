@@ -1,0 +1,25 @@
+# Dependencias de Node
+node_modules/
+*/node_modules/
+
+# Variables de entorno reales (nunca al repo)
+.env
+.env.local
+
+# Build del frontend
+frontend/dist/
+
+# Build del backend
+api/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

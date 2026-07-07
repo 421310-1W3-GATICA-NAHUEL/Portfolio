@@ -1,0 +1,62 @@
+{
+  "hero": {
+    "greeting": "Hi, I'm",
+    "role": "Full Stack Developer",
+    "cta_projects": "View Work",
+    "cta_contact": "Contact Me",
+    "available": "Available for new opportunities",
+    "remote": "Open to Remote"
+  },
+  "nav": {
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "about": {
+    "title": "About Me",
+    "who_am_i_title": "Who am I?",
+    "who_am_i_desc": "I'm a software developer who fell deeply in love with programming and the ability to build solutions from scratch. I thrive on big challenges — those complex problems that make others hesitate are exactly what drive me to dig deeper. I live in constant learning mode, consuming information daily to stay on top of emerging technologies.",
+    "where_title": "Where am I from?",
+    "where_desc": "Based in Córdoba, Argentina, currently finishing my last year of a Software Programming degree — giving me a solid, up-to-date theoretical and practical foundation. I work remotely on a global scale, connecting with international teams and clients to deliver value across borders.",
+    "what_i_do_title": "What do I do?",
+    "what_i_do_desc": "I turn ideas into living code. I specialize in Full Stack development — designing robust backend architectures and connecting them to beautiful, intuitive, fluid user interfaces. I enjoy bridging the gap between the hard logic of the server and the final experience of the user.",
+    "my_idea_title": "My Vision",
+    "my_idea_desc": "Transform and optimize businesses. I help clients automate every possible process to maximize efficiency, providing close, empathetic, and strategic guidance. I stand out for my ability to deeply understand each client's real needs and translate them into effective technical solutions with direct impact on their productivity."
+  },
+  "skills": {
+    "title": "Tech Stack"
+  },
+  "projects": {
+    "title": "Featured Projects",
+    "error_loading": "Could not load projects. Please try again later."
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Drop me a line and I'll get back to you",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "message_placeholder": "How can I help you?",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent!",
+    "error": "Failed to send",
+    "error_msg": "There was an error. Please try again.",
+    "err_name": "Please enter your name (min 2 characters)",
+    "err_email": "Please enter a valid email address",
+    "err_message": "Message is too short (min 10 characters)"
+  },
+  "stats": {
+    "experience": "Years of Experience",
+    "projects": "Projects Completed",
+    "databases": "Databases Mastered",
+    "languages": "Languages"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "tagline": "Full Stack Developer specialized in building scalable web apps and APIs. Open to work worldwide.",
+    "navigate": "Navigate",
+    "connect": "Connect"
+  }
+}

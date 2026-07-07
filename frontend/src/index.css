@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark text-gray-200 antialiased overflow-x-hidden;
+    scroll-behavior: smooth;
+    /* Cyan-colored arrow cursor */
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 2l16 9-9 2-4 8z' fill='%2306b6d4' stroke='%230B0C10' stroke-width='1'/%3E%3C/svg%3E") 4 2, auto;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  section[id] {
+    scroll-margin-top: 64px;
+  }
+  /* Pointer cursor for interactive elements */
+  a, button, [role="button"], [type="submit"] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 2l16 9-9 2-4 8z' fill='%2306b6d4' stroke='%230B0C10' stroke-width='1'/%3E%3C/svg%3E") 4 2, pointer;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-electric-cyan to-electric-violet;
+  }
+  .bg-glass {
+    @apply bg-dark-paper/80 backdrop-blur-md border border-gray-800;
+  }
+}

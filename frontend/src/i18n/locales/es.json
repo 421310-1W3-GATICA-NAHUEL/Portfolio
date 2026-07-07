@@ -1,0 +1,62 @@
+{
+  "hero": {
+    "greeting": "Hola, soy",
+    "role": "Desarrollador Full Stack",
+    "cta_projects": "Ver Proyectos",
+    "cta_contact": "Contáctame",
+    "available": "Disponible para nuevas oportunidades",
+    "remote": "Abierto a trabajo remoto"
+  },
+  "nav": {
+    "about": "Sobre mí",
+    "skills": "Habilidades",
+    "projects": "Proyectos",
+    "contact": "Contacto"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "who_am_i_title": "¿Quién soy?",
+    "who_am_i_desc": "Soy un desarrollador de software que se enamoró perdidamente de la programación y de la capacidad de crear soluciones desde cero. Me apasionan los grandes desafíos; esos problemas complejos que a otros hacen dudar, a mí me motivan a investigar. Vivo en constante aprendizaje, devorando información y actualizándome día a día para dominar las tecnologías emergentes.",
+    "where_title": "¿De dónde soy?",
+    "where_desc": "Basado en Córdoba, Argentina. Actualmente cursando el último año de la Tecnicatura en Programación, con una base teórica y práctica sólida. Trabajo de manera remota a nivel global, conectando con equipos y clientes internacionales para aportar valor sin fronteras geográficas.",
+    "what_i_do_title": "¿Qué hago?",
+    "what_i_do_desc": "Traduzco ideas en código vivo. Me especializo en el desarrollo Full Stack: diseño arquitecturas backend robustas y las conecto con interfaces hermosas, intuitivas y fluidas. Disfruto tender ese puente entre la lógica dura del servidor y la experiencia final del usuario.",
+    "my_idea_title": "Mi visión",
+    "my_idea_desc": "Transformar y optimizar negocios. Ayudo a automatizar procesos para maximizar la eficiencia, con un asesoramiento cercano y una comunicación estratégica clara. Me destaco por entender a fondo las necesidades reales de cada cliente y traducirlas en soluciones técnicas efectivas con impacto directo en su productividad."
+  },
+  "skills": {
+    "title": "Stack Tecnológico"
+  },
+  "projects": {
+    "title": "Proyectos Destacados",
+    "error_loading": "No se pudieron cargar los proyectos. Inténtalo de nuevo más tarde."
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Escribime y me pongo en contacto",
+    "name": "Nombre",
+    "email": "Email",
+    "message": "Mensaje",
+    "message_placeholder": "¿En qué te puedo ayudar?",
+    "send": "Enviar Mensaje",
+    "sending": "Enviando...",
+    "success": "Mensaje enviado!",
+    "error": "Error al enviar",
+    "error_msg": "Hubo un error. Por favor intentá de nuevo.",
+    "err_name": "Por favor ingresá tu nombre (mínimo 2 letras)",
+    "err_email": "Por favor ingresá un email válido",
+    "err_message": "El mensaje es muy corto (mínimo 10 caracteres)"
+  },
+  "stats": {
+    "experience": "Años de Experiencia",
+    "projects": "Proyectos Completados",
+    "databases": "Bases de Datos",
+    "languages": "Idiomas"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "tagline": "Desarrollador Full Stack especializado en construir aplicaciones web escalables y APIs. Disponible globalmente.",
+    "navigate": "Navegar",
+    "connect": "Conectar"
+  }
+}
