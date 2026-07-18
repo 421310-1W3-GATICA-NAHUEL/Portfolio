@@ -11,7 +11,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cvDropOpen, setCvDropOpen] = useState(false);
@@ -40,8 +40,6 @@ export default function Navbar() {
     });
     return () => observer.disconnect();
   }, []);
-
-  const cvLang = i18n.language === 'es' ? 'es' : 'en';
 
   return (
     <header
