@@ -29,7 +29,9 @@
   },
   "projects": {
     "title": "Featured Projects",
-    "error_loading": "Could not load projects. Please try again later."
+    "error_loading": "Could not load projects. Please try again later.",
+    "prev": "Previous project",
+    "next": "Next project"
   },
   "contact": {
     "title": "Contact",

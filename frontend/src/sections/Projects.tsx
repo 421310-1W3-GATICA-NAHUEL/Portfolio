@@ -1,7 +1,7 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Code2, ExternalLink, Loader2 } from 'lucide-react';
+import { Code2, ExternalLink, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -56,15 +56,44 @@ export default function Projects() {
     [projects, activeFilter]
   );
 
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    setCanScrollPrev(el.scrollLeft > 4);
+    setCanScrollNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+  }, []);
+
+  useLayoutEffect(() => {
+    trackRef.current?.scrollTo({ left: 0 });
+    updateScrollState();
+  }, [filtered, updateScrollState]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateScrollState);
+    return () => window.removeEventListener('resize', updateScrollState);
+  }, [updateScrollState]);
+
+  const scrollByCard = (direction: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>('[data-project-card]');
+    const amount = card ? card.offsetWidth + 32 : el.clientWidth * 0.9;
+    el.scrollBy({ left: direction * amount, behavior: 'smooth' });
+  };
+
   return (
-    <section id="projects" className="relative w-full py-24 bg-dark overflow-hidden">
+    <section id="projects" className="relative w-full py-16 bg-dark overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-gradient">{t('projects.title')}</span>
@@ -78,7 +107,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex flex-wrap gap-2 justify-center mb-10"
+            className="flex flex-wrap gap-2 justify-center mb-6"
           >
             {allTags.map(tag => (
               <button
@@ -105,79 +134,107 @@ export default function Projects() {
             {error}
           </div>
         ) : (
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {filtered.map((project, index) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="bg-glass rounded-2xl overflow-hidden group border border-gray-800 hover:border-electric-cyan/50 transition-colors flex flex-col"
-              >
-                <div className="relative h-48 overflow-hidden bg-dark-paper">
-                  <div className="absolute inset-0 bg-electric-cyan/10 group-hover:bg-transparent transition-colors z-10" />
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title[currentLang]}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-
-                <div className="p-6 flex-grow flex flex-col">
-                  <h3 className="text-xl font-bold text-gray-100 mb-2">
-                    {project.title[currentLang] || project.title['en']}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4 flex-grow">
-                    {project.description[currentLang] || project.description['en']}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map(tech => (
-                      <span
-                        key={tech}
-                        onClick={() => setActiveFilter(tech)}
-                        className={`text-xs font-mono px-2 py-1 rounded cursor-pointer transition-colors ${
-                          activeFilter === tech
-                            ? 'bg-electric-cyan text-dark'
-                            : 'text-electric-cyan bg-electric-cyan/10 hover:bg-electric-cyan/20'
-                        }`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
+          <div>
+            <div
+              ref={trackRef}
+              onScroll={updateScrollState}
+              className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-6 px-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {filtered.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  data-project-card
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                  className="snap-start shrink-0 w-[85%] sm:w-[46%] lg:w-[31%] bg-glass rounded-2xl overflow-hidden group border border-gray-800 hover:border-electric-cyan/50 transition-colors flex flex-col"
+                >
+                  <div className="relative h-32 overflow-hidden bg-dark-paper">
+                    <div className="absolute inset-0 bg-electric-cyan/10 group-hover:bg-transparent transition-colors z-10" />
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title[currentLang]}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    />
                   </div>
 
-                  <div className="flex gap-4 mt-auto">
-                    {project.repoUrl && (
-                      <a
-                        href={project.repoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
-                      >
-                        <Code2 size={16} /> Code
-                      </a>
-                    )}
-                    {project.demoUrl && project.demoUrl !== '#' && (
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-2 text-sm text-electric-cyan hover:text-electric-cyan/80 transition-colors"
-                      >
-                        <ExternalLink size={16} /> Demo
-                      </a>
-                    )}
+                  <div className="p-4 flex-grow flex flex-col">
+                    <h3 className="text-base font-bold text-gray-100 mb-1.5 line-clamp-1">
+                      {project.title[currentLang] || project.title['en']}
+                    </h3>
+                    <p className="text-gray-400 text-xs mb-3 flex-grow line-clamp-3">
+                      {project.description[currentLang] || project.description['en']}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {project.technologies.slice(0, 5).map(tech => (
+                        <span
+                          key={tech}
+                          onClick={() => setActiveFilter(tech)}
+                          className={`text-[10px] font-mono px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
+                            activeFilter === tech
+                              ? 'bg-electric-cyan text-dark'
+                              : 'text-electric-cyan bg-electric-cyan/10 hover:bg-electric-cyan/20'
+                          }`}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 5 && (
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded text-gray-500">
+                          +{project.technologies.length - 5}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex gap-4 mt-auto">
+                      {project.repoUrl && (
+                        <a
+                          href={project.repoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+                        >
+                          <Code2 size={16} /> Code
+                        </a>
+                      )}
+                      {project.demoUrl && project.demoUrl !== '#' && (
+                        <a
+                          href={project.demoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-2 text-sm text-electric-cyan hover:text-electric-cyan/80 transition-colors"
+                        >
+                          <ExternalLink size={16} /> Demo
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </div>
+
+            {filtered.length > 1 && (
+              <div className="flex justify-center gap-4 mt-6">
+                <button
+                  onClick={() => scrollByCard(-1)}
+                  disabled={!canScrollPrev}
+                  aria-label={t('projects.prev')}
+                  className="w-11 h-11 flex items-center justify-center rounded-full border border-gray-700 text-gray-300 transition-all hover:border-electric-cyan/50 hover:text-electric-cyan disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-700 disabled:hover:text-gray-300"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  onClick={() => scrollByCard(1)}
+                  disabled={!canScrollNext}
+                  aria-label={t('projects.next')}
+                  className="w-11 h-11 flex items-center justify-center rounded-full border border-gray-700 text-gray-300 transition-all hover:border-electric-cyan/50 hover:text-electric-cyan disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-700 disabled:hover:text-gray-300"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
