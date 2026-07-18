@@ -33,5 +33,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', environment: process.env.NODE_ENV });
 });
 
+// Manejador de errores: garantiza que cualquier falla (CORS, JSON malformado, etc.)
+// responda JSON en vez de la página HTML por defecto de Express.
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Unhandled error:', err.message);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
 // Vercel serverless functions require exporting the express app
 export default app;
