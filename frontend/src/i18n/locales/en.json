@@ -31,7 +31,8 @@
     "title": "Featured Projects",
     "error_loading": "Could not load projects. Please try again later.",
     "prev": "Previous project",
-    "next": "Next project"
+    "next": "Next project",
+    "close": "Close"
   },
   "contact": {
     "title": "Contact",

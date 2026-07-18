@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Code2, ExternalLink, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Code2, ExternalLink, Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -85,6 +85,21 @@ export default function Projects() {
     el.scrollBy({ left: direction * amount, behavior: 'smooth' });
   };
 
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedProject(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [selectedProject]);
+
   return (
     <section id="projects" className="relative w-full py-16 bg-dark overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
@@ -144,10 +159,11 @@ export default function Projects() {
                 <motion.div
                   key={project.id}
                   data-project-card
+                  onClick={() => setSelectedProject(project)}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.08 }}
-                  className="snap-start shrink-0 w-[85%] sm:w-[46%] lg:w-[31%] bg-glass rounded-2xl overflow-hidden group border border-gray-800 hover:border-electric-cyan/50 transition-colors flex flex-col"
+                  className="snap-start shrink-0 w-[85%] sm:w-[46%] lg:w-[31%] bg-glass rounded-2xl overflow-hidden group border border-gray-800 hover:border-electric-cyan/50 transition-colors flex flex-col cursor-pointer"
                 >
                   <div className="relative h-32 overflow-hidden bg-dark-paper">
                     <div className="absolute inset-0 bg-electric-cyan/10 group-hover:bg-transparent transition-colors z-10" />
@@ -170,7 +186,7 @@ export default function Projects() {
                       {project.technologies.slice(0, 5).map(tech => (
                         <span
                           key={tech}
-                          onClick={() => setActiveFilter(tech)}
+                          onClick={(e) => { e.stopPropagation(); setActiveFilter(tech); }}
                           className={`text-[10px] font-mono px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
                             activeFilter === tech
                               ? 'bg-electric-cyan text-dark'
@@ -193,6 +209,7 @@ export default function Projects() {
                           href={project.repoUrl}
                           target="_blank"
                           rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
                         >
                           <Code2 size={16} /> Code
@@ -203,6 +220,7 @@ export default function Projects() {
                           href={project.demoUrl}
                           target="_blank"
                           rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="flex items-center gap-2 text-sm text-electric-cyan hover:text-electric-cyan/80 transition-colors"
                         >
                           <ExternalLink size={16} /> Demo
@@ -240,6 +258,86 @@ export default function Projects() {
 
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-electric-blue/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-electric-violet/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl border border-gray-800 bg-dark-paper shadow-2xl"
+            >
+              <button
+                onClick={() => setSelectedProject(null)}
+                aria-label={t('projects.close')}
+                className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-dark/70 text-gray-300 hover:text-white hover:bg-dark transition-colors"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="relative h-56 overflow-hidden bg-dark">
+                <img
+                  src={selectedProject.imageUrl}
+                  alt={selectedProject.title[currentLang]}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-gray-100 mb-3">
+                  {selectedProject.title[currentLang] || selectedProject.title['en']}
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-5">
+                  {selectedProject.description[currentLang] || selectedProject.description['en']}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {selectedProject.technologies.map(tech => (
+                    <span
+                      key={tech}
+                      className="text-xs font-mono px-2 py-1 rounded text-electric-cyan bg-electric-cyan/10"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex gap-4">
+                  {selectedProject.repoUrl && (
+                    <a
+                      href={selectedProject.repoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 text-sm text-gray-300 hover:text-white hover:border-gray-500 transition-colors"
+                    >
+                      <Code2 size={16} /> Code
+                    </a>
+                  )}
+                  {selectedProject.demoUrl && selectedProject.demoUrl !== '#' && (
+                    <a
+                      href={selectedProject.demoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-electric-cyan text-dark text-sm font-medium hover:bg-electric-cyan/80 transition-colors"
+                    >
+                      <ExternalLink size={16} /> Demo
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

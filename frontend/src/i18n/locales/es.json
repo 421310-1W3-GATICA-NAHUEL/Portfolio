@@ -31,7 +31,8 @@
     "title": "Proyectos Destacados",
     "error_loading": "No se pudieron cargar los proyectos. Inténtalo de nuevo más tarde.",
     "prev": "Proyecto anterior",
-    "next": "Siguiente proyecto"
+    "next": "Siguiente proyecto",
+    "close": "Cerrar"
   },
   "contact": {
     "title": "Contacto",
